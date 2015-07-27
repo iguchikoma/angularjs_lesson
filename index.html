@@ -1,0 +1,104 @@
+<!doctype html>
+<html ng-app="myapp" ng-controller="mainCtrl">
+  <head>
+    <script src="js/angular.min.js"></script>
+    <script src="js/lesson.js"></script>
+    <style>
+      .even {
+        background:#ccc;
+      }
+      .odd{
+        background:red;
+      }
+    </style>
+  </head>
+  <title>{{query}}</title>
+  <body>
+    <p>-----------test1--------------------------</p>
+    <div>
+      <div>
+        Search: <input type="text" ng-model="query1">
+      </div>
+      <div>
+        Search by name: <input type="text" ng-model="query2.name">
+      </div>
+      <div>
+        Search by score: <input type="text" ng-model="query3.score">
+      </div>
+        Sort by:
+      <select ng-model="orderProp">
+        <option value="name">name</option>
+        <option value="-name">reverse-name</option>
+        <option value="score">score</option>
+        <option value="-score">reverse-score</option>
+      </select>
+    </div>
+    <ul>
+      <li ng-repeat="user in users| filter:query1 |filter:query2|filter:query3| orderBy:orderProp"
+       ng-class-even="'even'" ng-class-odd="'odd'">
+      {{$index+1}} {{$first}} {{$middle}} {{$last}} {{user.name|lowercase}} {{user.score|number:4}}
+      </li>
+    </ul>
+    <p>-----------test2--------------------------</p>
+    <ul>
+      <li ng-repeat="user in users|orderBy:'-score'|limitTo:3">
+      {{user.name|uppercase}} {{user.score}}
+      </li>
+    </ul>
+    <p>----------------test3---------------------</p>
+    <ul>
+      <li ng-repeat="user in users" ng-controller="userItemCtrl">
+      {{user.name}} {{user.score}}
+      <button ng-click="increment()">+1</button>
+      </li>
+    </ul>
+    <p>----------------test3---------------------</p>
+    <form novalidate name="myForm" ng-submit="addUser()">
+      <p>Name:
+      <input type="text" name="name" ng-model="user.name"
+      required ng-minlength="5" ng-maxlength="8">
+      <span ng-show="myForm.name.$error.required">Required!</span>
+      <span ng-show="myForm.name.$error.minlength">Too short!</span>
+      <span ng-show="myForm.name.$error.maxlength">Too log!</span>
+      </p>
+      <p>Score:
+      <input type="number" name="score" ng-model="user.score">
+      </p>
+      <p>Email:
+      <input type="email" name="email" ng-model="user.email">
+      <span ng-show="myForm.email.$error.email">Not valid email!</span>
+      </p>
+      <p>Web:
+      <input type="url" name="url" ng-model="user.url">
+      <span ng-show="myForm.url.$error.url">Not valid email!</span>
+      </p>
+      <p>18+:<input type="checkbox" ng-model="user.adult"></p>
+      <p>Phone:
+        <input type="radio" ng-model="user.phone" value="iPhone"> iPhone
+        <input type="radio" ng-model="user.phone" value="Android"> Android
+        </p>
+        <p>Memo:
+        <textarea ng-model="user.memo" ng-maxlength="140"></textarea>{{140-user.memo.length}}
+        </p>
+
+        <p>Color:
+        <select ng-model="user.color" ng-options="'label:'+i for i in ['red', 'blue', 'pink']"
+          ng-init="user.color='red'"</select>
+        </p>
+    <p><input type="submit" value="add"></p>
+    </form>
+    <p>My name is {{myname}}</p>
+    <pre>{{user|json}}</pre>
+    <table>
+      <tr><th>row number</th></tr>
+      <tr ng-repeat="i in [0,  1,  2,  3,  4,  5,  6,  7]"><td>{{i}}</td></tr>
+      <tr><th>row number + 1</th></tr>
+      <tr ng-repeat="i in [0,  1,  2,  3,  4,  5,  6,  7]"><td>{{i+1}}</td></tr>
+    </table>
+    <p>{{today|date:'yyyy-MM-dd'}}</p>
+    <p>{{users.length}} users</p>
+    <p>{{25*500|number}} users</p>
+    <p>{{25*500|currency}} users</p>
+    <p>{{25*500|currency:"a"}} users</p>
+  </body>
+</html>
